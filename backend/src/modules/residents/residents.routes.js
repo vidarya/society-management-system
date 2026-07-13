@@ -17,6 +17,7 @@ router.get('/flats', authenticate, residentsController.getAllFlats);
 router.get('/residents', authenticate, authorize('ADMIN'), residentsController.getAllResidents);
 router.get('/residents/me', authenticate, residentsController.getMyProfile);
 router.put('/residents/me', authenticate, updateProfileValidation, residentsController.updateMyProfile);
+router.get('/residents/export/excel', authenticate, authorize('ADMIN'), residentsController.exportResidentsExcel);
 router.put('/residents/:id/assign-flat', authenticate, authorize('ADMIN'), assignFlatValidation, residentsController.assignFlat);
 router.delete('/residents/:id', authenticate, authorize('ADMIN'), residentsController.deleteResident);
 

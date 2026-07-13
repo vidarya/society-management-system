@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import DashboardLayout from '../layouts/DashboardLayout';
 import { getMyBills, payBill, downloadBillPdf } from '../api/billingApi';
 import { getMyComplaints, createComplaint } from '../api/complaintsApi';
+import VisitorsSection from '../components/resident/VisitorsSection';
+import BookingsSection from '../components/resident/BookingsSection';
+import NoticesSection from '../components/resident/NoticesSection';
 
 function ResidentDashboard() {
   const queryClient = useQueryClient();
@@ -114,7 +117,7 @@ function ResidentDashboard() {
         <p className="text-gray-500">No complaints raised yet.</p>
       )}
 
-      <div className="grid gap-3">
+      <div className="grid gap-3 mb-10">
         {complaintsQuery.data?.data.map((complaint) => (
           <div key={complaint.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <div className="flex justify-between items-start">
@@ -126,6 +129,18 @@ function ResidentDashboard() {
             <p className="text-sm text-gray-600 mt-1">{complaint.description}</p>
           </div>
         ))}
+      </div>
+
+      <div className="mb-10">
+        <VisitorsSection />
+      </div>
+
+      <div className="mb-10">
+        <BookingsSection />
+      </div>
+
+      <div className="mb-10">
+        <NoticesSection />
       </div>
     </DashboardLayout>
   );

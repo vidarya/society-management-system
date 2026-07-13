@@ -9,6 +9,9 @@ const { authenticate } = require('./middlewares/auth.middleware');
 const residentsRoutes = require('./modules/residents/residents.routes');
 const billingRoutes = require('./modules/billing/billing.routes');
 const complaintsRoutes = require('./modules/complaints/complaints.routes');
+const visitorsRoutes = require('./modules/visitors/visitors.routes');
+const facilitiesRoutes = require('./modules/facilities/facilities.routes');
+const noticesRoutes = require('./modules/notices/notices.routes');
 
 const app = express();
 
@@ -44,6 +47,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api', residentsRoutes);
 app.use('/api', billingRoutes);
 app.use('/api', complaintsRoutes);
+app.use('/api', visitorsRoutes);
+app.use('/api', facilitiesRoutes);
+app.use('/api', noticesRoutes);
 
 // Global error handler — must be last
 app.use(errorHandler);

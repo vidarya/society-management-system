@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const billingService = require('./billing.service');
 const { generateBillPdf } = require('../../utils/pdfGenerator');
+const { generateBillsExcel } = require('../../utils/excelGenerator');
 
 function checkValidation(req, res) {
   const errors = validationResult(req);
@@ -67,10 +68,20 @@ async function downloadBillPdf(req, res, next) {
   }
 }
 
+async function exportBillsExcel(req, res, next) {
+  try {
+    const bills = await billingService.getAllBills();
+    await generateBillsExcel(bills, res);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createBill,
   getAllBills,
   getMyBills,
   markAsPaid,
   downloadBillPdf,
+  exportBillsExcel,
 };

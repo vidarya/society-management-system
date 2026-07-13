@@ -25,6 +25,8 @@ model User {
 
   raisedComplaints   Complaint[] @relation("RaisedComplaints")
   assignedComplaints Complaint[] @relation("AssignedComplaints")
+  approvedVisitors Visitor[]
+  facilityBookings FacilityBooking[]
 }
 
 model Flat {
@@ -35,6 +37,7 @@ model Flat {
   residents   User[]
   bills       Bill[]  
   createdAt   DateTime @default(now())
+  visitors Visitor[]
 }
 
 enum Role {
@@ -88,4 +91,67 @@ enum Priority {
   LOW
   MEDIUM
   HIGH
+}
+model Visitor {
+  id            String        @id @default(uuid())
+  name          String
+  phone         String
+  purpose       String
+  vehicleNumber String?
+  status        VisitorStatus @default(PENDING)
+
+  flat          Flat          @relation(fields: [flatId], references: [id])
+  flatId        String
+
+  approvedBy    User          @relation(fields: [approvedById], references: [id])
+  approvedById  String
+
+  qrCode        String        @unique
+  logs          VisitorLog[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum VisitorStatus {
+  PENDING
+  APPROVED
+  CHECKED_IN
+  CHECKED_OUT
+  REJECTED
+}
+model VisitorLog {
+  id          String    @id @default(uuid())
+  visitor     Visitor   @relation(fields: [visitorId], references: [id])
+  visitorId   String
+  entryTime   DateTime  @default(now())
+  exitTime    DateTime?
+}
+model Facility {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  capacity    Int?
+  bookings    FacilityBooking[]
+  createdAt   DateTime  @default(now())
+}
+model FacilityBooking {
+  id          String        @id @default(uuid())
+  facility    Facility      @relation(fields: [facilityId], references: [id])
+  facilityId  String
+
+  bookedBy    User          @relation(fields: [bookedById], references: [id])
+  bookedById  String
+
+  date        DateTime
+  startTime   String
+  endTime     String
+  status      BookingStatus @default(CONFIRMED)
+
+  createdAt   DateTime      @default(now())
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
 }

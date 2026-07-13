@@ -8,6 +8,7 @@ const { authenticate, authorize } = require('../../middlewares/auth.middleware')
 router.post('/bills', authenticate, authorize('ADMIN'), createBillValidation, billingController.createBill);
 router.get('/bills', authenticate, authorize('ADMIN'), billingController.getAllBills);
 router.get('/bills/my', authenticate, billingController.getMyBills);
+router.get('/bills/export/excel', authenticate, authorize('ADMIN'), billingController.exportBillsExcel);
 router.put('/bills/:id/pay', authenticate, billingController.markAsPaid);
 router.get('/bills/:id/pdf', authenticate, billingController.downloadBillPdf);
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllFlats, createFlat, getAllResidents, assignResidentToFlat } from '../../api/residentsApi';
+import { getAllFlats, createFlat, getAllResidents, assignResidentToFlat, getResidentsExcelUrl } from '../../api/residentsApi';
+import { downloadExcelReport } from '../../api/billingApi';
 
 function FlatsResidentsTab() {
   const queryClient = useQueryClient();
@@ -59,7 +60,15 @@ function FlatsResidentsTab() {
       </div>
 
       <div>
-        <h3 className="font-semibold text-gray-800 mb-3">All Residents</h3>
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="font-semibold text-gray-800">All Residents</h3>
+          <button
+            onClick={() => downloadExcelReport(getResidentsExcelUrl(), 'residents.xlsx')}
+            className="text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700"
+          >
+            Export to Excel
+          </button>
+        </div>
         <div className="space-y-2">
           {residentsQuery.data?.data.map((resident) => (
             <div key={resident.id} className="bg-white border border-gray-200 rounded p-3 text-sm">

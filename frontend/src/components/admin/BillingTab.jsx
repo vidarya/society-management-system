@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllBills } from '../../api/billingApi';
+import { getAllBills, downloadExcelReport } from '../../api/billingApi';
 import { getAllFlats } from '../../api/residentsApi';
 import axiosClient from '../../api/axiosClient';
 
@@ -35,6 +35,8 @@ function BillingTab() {
     createBillMutation.mutate({ flatId, amount: Number(amount), month, dueDate });
   }
 
+  const billsExcelUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/bills/export/excel`;
+
   return (
     <div>
       <h3 className="font-semibold text-gray-800 mb-3">Create Maintenance Bill</h3>
@@ -53,7 +55,15 @@ function BillingTab() {
         </button>
       </form>
 
-      <h3 className="font-semibold text-gray-800 mb-3">All Maintenance Bills</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="font-semibold text-gray-800">All Maintenance Bills</h3>
+        <button
+          onClick={() => downloadExcelReport(billsExcelUrl, 'bills-report.xlsx')}
+          className="text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700"
+        >
+          Export to Excel
+        </button>
+      </div>
       <div className="grid gap-2">
         {billsQuery.data?.data.map((bill) => (
           <div key={bill.id} className="bg-white border border-gray-200 rounded p-3 text-sm flex justify-between items-center">

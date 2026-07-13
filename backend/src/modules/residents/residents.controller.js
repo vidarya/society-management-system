@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const residentsService = require('./residents.service');
+const { generateResidentsExcel } = require('../../utils/excelGenerator');
 
 function checkValidation(req, res) {
   const errors = validationResult(req);
@@ -85,6 +86,15 @@ async function deleteResident(req, res, next) {
   }
 }
 
+async function exportResidentsExcel(req, res, next) {
+  try {
+    const residents = await residentsService.getAllResidents();
+    await generateResidentsExcel(residents, res);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createFlat,
   getAllFlats,
@@ -93,4 +103,5 @@ module.exports = {
   updateMyProfile,
   assignFlat,
   deleteResident,
+  exportResidentsExcel,
 };

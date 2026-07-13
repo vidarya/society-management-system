@@ -19,3 +19,6 @@ export async function assignResidentToFlat(residentId, flatId) {
   const response = await axiosClient.put(`/residents/${residentId}/assign-flat`, { flatId });
   return response.data;
 }
+export function getResidentsExcelUrl() {
+  return `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/residents/export/excel`;
+}
